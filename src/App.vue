@@ -15,79 +15,29 @@
     const path = require('path');
     import FolderImageList from "./components/FolderImageList";
     const {promises: fsp} = require("fs");
-    const globb = require('globby');
-
-    const fg = require('fast-glob');
-
-    const {remote} = require('electron');
-    const {dialog} = remote;
-    var levelup = require('levelup');
-    var leveldown = require('leveldown');
-    // 1) Create our store
-    var db = levelup(leveldown('./content'));
-    var putValue = async (_) => {
-        await db.put('name', 'levelup');
-        var value = await db.get('name');
-        console.log(value);
-
-    };
-    putValue();
 
     export default {
         name: 'app',
         data: vm => ({
-            rootPath: 'C:\\Users\\perym\\OneDrive\\Documents\\תן אמון במימון',
-            section: '',
-            folderCommentsRootName: 'ציטוטים',
             text: 'check it out!',
             options:{}
         }),
         props: [],
-        computed: {
-            imagesPath() {
-                return path.join(this.rootPath, this.section) || '';
-            },
-            commentsPath() {
-                return path.join(this.rootPath, this.folderCommentsRootName) || '';
-            }
-        },
-        asyncComputed: {
-            async sections() {
-                const rootPath = this.rootPath;
-                const paths = await fg.async([path.join(rootPath, '*')], {onlyDirectories: true});
-                return paths.map(directoryPath => path.basename(directoryPath));
-            }
-        },
+        computed: {        },
+        asyncComputed: {        },
         components: {
             FolderImageList
         },
         methods: {
-            selectRootPath() {
-                let folderPath = dialog.showOpenDialog(remote.getCurrentWindow(), {
-                    properties: ['openDirectory']
-                });
-                this.rootPath = folderPath[0];
-                console.log('root path:', folderPath);
-            },
-            selectSection(name) {
-                this.section = name;
-            },
+
             async processEditOperation(operation) {
                 console.log(operation);
                 this.text = operation.api.origElements.innerHTML;
                 const savePath = path.join(this.rootPath, this.section, 'content.html');
                 await fsp.writeFile(savePath,this.text)
             }
-        },
-        // mounted(){
-        // const container = this.$refs.editor;
-        // debugger;
-        // var simplemde = new SimpleMDE({
-        //     element: container,
-        //     autoDownloadFontAwesome:true,
-        //     forceSync:true
-        // });
-        // }
+        }
+
 
     }
 </script>

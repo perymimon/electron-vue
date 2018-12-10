@@ -12,14 +12,13 @@
   },
   "dependencies": {
     "fast-glob": "^2.2.4",
+    "level": "^4.0.0",
+    "medium-editor": "*",
     "mime": "^2.4.0",
     "vue": "^2.5.17",
     "vue-async-computed": "^3.5.0",
-    "vuex": "^3.0.1",
     "vue2-medium-editor": "*",
-    "medium-editor": "*",
-    "levelup": "*",
-    "leveldown": "*"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
