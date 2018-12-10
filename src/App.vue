@@ -12,9 +12,11 @@
 // }-->
 
 <script>
-    const path = require('path');
+    import { mapMutations, mapActions, mapState, mapGetters } from 'vuex'
     import FolderImageList from "./components/FolderImageList";
+    const path = require('path');
     const {promises: fsp} = require("fs");
+
 
     export default {
         name: 'app',
@@ -23,17 +25,20 @@
             options:{}
         }),
         props: [],
-        computed: {        },
+        computed: {
+            ...mapState(['rootPath','section','sectionList']),
+            ...mapGetters(['activePath'])
+        },
         asyncComputed: {        },
         components: {
             FolderImageList
         },
         methods: {
-
+            ... mapMutations(['changeSection']),
+            ... mapActions('addNewQuotes,changeRootPathByDialog,selectSection'.split(',')),
             async processEditOperation(operation) {
-                console.log(operation);
                 this.text = operation.api.origElements.innerHTML;
-                const savePath = path.join(this.rootPath, this.section, 'content.html');
+                const savePath = path.join(this.activePath, 'content.html');
                 await fsp.writeFile(savePath,this.text)
             }
         }
@@ -47,14 +52,14 @@
     <div id="app">
         <!-- TOP PANEL -->
         <div class="panel top-panel">
-            <button @click="selectRootPath">opne</button>
-            <input type="text" v-model="rootPath">
+            <button @click="changeRootPathByDialog">open</button>
+            <input type="text" :value="rootPath">
         </div>
 
         <!-- LEFT -->
         <div class="panel">
             <h4>{{section}}</h4>
-            <file-list :folderPath="imagesPath"></file-list>
+            <file-list :folderPath="activePath"></file-list>
         </div>
 
         <!-- MAIN AREA -->
@@ -75,7 +80,8 @@
         <!--</div>-->
 
         <div class="panel">
-            <div v-for="section in sections" @click="selectSection(section)">
+            <div v-for="section in sectionList" :key="section"
+                 @click="changeSection(section)">
                 {{section}}
             </div>
             <!--<folder-markdown-list :folderPath="commentsPath"></folder-markdown-list>-->

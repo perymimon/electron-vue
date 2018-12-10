@@ -5,6 +5,7 @@ const {remote} = require('electron');
 const {dialog} = remote;
 const fg = require('fast-glob');
 const {promises: fsp} = require("fs");
+const path = require('path');
 
 Vue.use(Vuex);
 var level = require('level');
@@ -46,13 +47,13 @@ export default new Vuex.Store({
             commit('setQuotesList',quotesList);
             await db.set(state.section, quotesList );
         },
-        async changeRootPathByDialog({ commit }) {
+        async changeRootPathByDialog({ commit, state }) {
             let folderPath = dialog.showOpenDialog(remote.getCurrentWindow(), {
                 properties: ['openDirectory']
             });
             commit('setRootPath',folderPath[0]);
 
-            const directoryPaths = await fg.async([path.join(rootPath, '*')], {onlyDirectories: true});
+            const directoryPaths = await fg.async([path.join(state.rootPath, '*')], {onlyDirectories: true});
             const directories = directoryPaths.map(directoryPath => path.basename(directoryPath));
             commit('setSectionsList',directories);
         },
