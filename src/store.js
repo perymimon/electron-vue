@@ -9,7 +9,7 @@ const path = require('path');
 
 Vue.use(Vuex);
 var level = require('level');
-var db = level('./quotes');
+var db = level('./quotes',{ valueEncoding: 'json' });
 
 export default new Vuex.Store({
     state: {
@@ -24,6 +24,9 @@ export default new Vuex.Store({
     getters:{
         activePath(state){
             return path.join(state.rootPath, state.section)
+        },
+        projectName(state){
+            return path.basename(state.rootPath)
         }
     },
     mutations: {
@@ -45,7 +48,13 @@ export default new Vuex.Store({
         async addNewQuotes({commit, state}, quote) {
             const quotesList = [...state.quotesList,quote];
             commit('setQuotesList',quotesList);
-            await db.set(state.section, quotesList );
+            await db.put(state.section, quotesList );
+        },
+        async editQuotes({commit, state}, {index,  quote}) {
+            state.quotesList.splice(index,1, quote);
+            const quotesList = [...state.quotesList];
+            commit('setQuotesList',quotesList);
+            await db.put(state.section, quotesList );
         },
         async changeRootPathByDialog({ commit, state }) {
             let folderPath = dialog.showOpenDialog(remote.getCurrentWindow(), {
@@ -62,9 +71,10 @@ export default new Vuex.Store({
             try{
                 var quoteList  = await db.get(section);
             }catch (e) {
-                if(e.notFound){
-                    quoteList = [];
+                if(!e.notFound){
+                    console.error(e);
                 }
+                quoteList = [];
             }
 
             commit('setQuotesList',quoteList);

@@ -21,21 +21,23 @@
     export default {
         name: 'app',
         data: vm => ({
+            query:'',
+            newQuotes:'',
             text: 'check it out!',
             options:{}
         }),
         props: [],
         computed: {
-            ...mapState(['rootPath','section','sectionList']),
-            ...mapGetters(['activePath'])
+            ...mapState(['rootPath','section','sectionList','quotesList']),
+            ...mapGetters(['activePath','projectName'])
         },
         asyncComputed: {        },
         components: {
             FolderImageList
         },
         methods: {
-            ... mapMutations(['changeSection']),
-            ... mapActions('addNewQuotes,changeRootPathByDialog,selectSection'.split(',')),
+            // ... mapMutations(),
+            ... mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
             async processEditOperation(operation) {
                 this.text = operation.api.origElements.innerHTML;
                 const savePath = path.join(this.activePath, 'content.html');
@@ -53,7 +55,7 @@
         <!-- TOP PANEL -->
         <div class="panel top-panel">
             <button @click="changeRootPathByDialog">open</button>
-            <input type="text" :value="rootPath">
+            <h1>{{projectName}}</h1>
         </div>
 
         <!-- LEFT -->
@@ -81,18 +83,35 @@
 
         <div class="panel">
             <div v-for="section in sectionList" :key="section"
-                 @click="changeSection(section)">
+                 @click="selectSection(section)">
                 {{section}}
             </div>
             <!--<folder-markdown-list :folderPath="commentsPath"></folder-markdown-list>-->
-
-
         </div>
+        <div class="panel">
+            <input type="search"  v-model="query">
+            <medium-editor class="quote"
+                            v-for="(value, index) of quotesList"
+                            :text="value"
+                            @edit="editQuotes({index, quote:$event.api.origElements.innerHTML})"        >
+                {{value}}
+            </medium-editor>
 
+            <textarea  v-model.lazy="newQuotes" ></textarea>
+            <button @click="addNewQuotes(newQuotes)">add quote</button>
+        </div>
     </div>
 </template>
 
 <style lang="scss">
+    h1{
+        margin: 0;
+    }
+
+    .quote{
+        border: 1px solid;
+        border-radius: 0.3em;
+    }
 
     #app {
         height: 100vh;
