@@ -6,26 +6,35 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve",
+    "electron:build": "vue-cli-service electron:build --allow-file-access-from-files ",
+    "electron:serve": "vue-cli-service electron:serve --allow-file-access-from-files",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "fast-glob": "^2.2.4",
+    "mime": "^2.4.0",
     "vue": "^2.5.17",
-    "vuex": "^3.0.1"
+    "vue-async-computed": "^3.5.0",
+    "vuex": "^3.0.1",
+    "vue2-medium-editor": "*",
+    "medium-editor": "*",
+    "levelup": "*",
+    "leveldown": "*"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.2.1",
     "@vue/cli-service": "^3.0.5",
+    "ajv": "^6.6.1",
     "babel-eslint": "^10.0.1",
-    "electron": "^2.0.0",
+    "electron": "^3.0.10",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "vue-cli-plugin-electron-builder": "^1.0.0-rc.9",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.27.1"
   },
   "eslintConfig": {
     "root": true,
@@ -36,9 +45,14 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "rules": {
+      "vue/no-unused-components": "off",
+      "vue/no-unused-vars": "off",
+      "vue/no-use-v-if-with-v-for": "warning",
+      "vue/require-v-for-key": "warning"
     }
   },
   "postcss": {
