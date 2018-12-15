@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 import AsyncComputed from 'vue-async-computed'
-import FileList from './globalComponents/FileList'
+import draggable from 'vuedraggable'
 
 // param 0: The relative path of the components folder
 // param 1: Whether or not to look in subfolders
@@ -34,9 +34,12 @@ Vue.use(AsyncComputed);
 
 // Vue.component('FileList', FileList);
 Vue.component('medium-editor', editor);
+Vue.component('draggable', draggable);
 
 new Vue({
     store,
     render: h => h(App)
 }).$mount('#app');
 
+store.dispatch('changeRootPath','C:\\Users\\perym\\OneDrive\\Documents\\תן אמון במימון');
+store.dispatch('selectSection','מרפסת');

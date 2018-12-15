@@ -12,8 +12,9 @@
 // }-->
 
 <script>
-    import { mapMutations, mapActions, mapState, mapGetters } from 'vuex'
-    import FolderImageList from "./components/FolderImageList";
+    import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
+    import Page from './components/Page'
+
     const path = require('path');
     const {promises: fsp} = require("fs");
 
@@ -21,28 +22,37 @@
     export default {
         name: 'app',
         data: vm => ({
-            query:'',
-            newQuotes:'',
+            query: '',
+            newQuotes: '',
             text: 'check it out!',
-            options:{}
+            options: {}
         }),
         props: [],
         computed: {
-            ...mapState(['rootPath','section','sectionList','quotesList']),
-            ...mapGetters(['activePath','projectName'])
+            ...mapState(['rootPath', 'section', 'quotesList']),
+            ...mapGetters(['activePath', 'projectName', 'pages', 'issues', 'blocks']),
+            ...mapGetters('pages', ['pages', 'issues', 'blocks'])
         },
-        asyncComputed: {        },
+        asyncComputed: {...mapGetters(['sectionList'])},
         components: {
-            FolderImageList
+            Page
         },
         methods: {
-            // ... mapMutations(),
-            ... mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
+            // ... mapMutations(['addNewPage','addNewIssue','addNewBlock']),
+            ...mapMutations('pages', ['addNewPage', 'addNewIssue', 'addNewBlock']),
+            ...mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
+
             async processEditOperation(operation) {
                 this.text = operation.api.origElements.innerHTML;
                 const savePath = path.join(this.activePath, 'content.html');
-                await fsp.writeFile(savePath,this.text)
-            }
+                await fsp.writeFile(savePath, this.text)
+            },
+
+            // async drageend(event){
+            //     const elementID = event.dataTransfer.getData('element-id');
+            //     const path = event.dataTransfer.getData('path');
+            //     debugger;
+            // }
         }
 
 
@@ -66,15 +76,7 @@
 
         <!-- MAIN AREA -->
         <div class="panel main-area">
-            <!--<img alt="Vue logo" src="./assets/logo.png">-->
-            <h1>{{section}}</h1>
-            <medium-editor
-                    class="editor"
-                    :text='text'
-                    :options='options'
-                    @edit='processEditOperation'
-                    custom-tag='div'>
-            </medium-editor>
+            <Page v-for="page in pages" :value="page"></Page>
         </div>
 
         <!--<div class="panel">-->
@@ -82,33 +84,34 @@
         <!--</div>-->
 
         <div class="panel">
+
             <div v-for="section in sectionList" :key="section"
                  @click="selectSection(section)">
                 {{section}}
             </div>
-            <!--<folder-markdown-list :folderPath="commentsPath"></folder-markdown-list>-->
-        </div>
-        <div class="panel">
-            <input type="search"  v-model="query">
+
+            <input type="search" v-model="query">
+
             <medium-editor class="quote"
-                            v-for="(value, index) of quotesList"
-                            :text="value"
-                            @edit="editQuotes({index, quote:$event.api.origElements.innerHTML})"        >
+                           v-for="(value, index) of quotesList"
+                           :text="value"
+                           @edit="editQuotes({index, quote:$event.api.origElements.innerHTML})">
                 {{value}}
             </medium-editor>
 
-            <textarea  v-model.lazy="newQuotes" ></textarea>
+            <textarea v-model.lazy="newQuotes"></textarea>
             <button @click="addNewQuotes(newQuotes)">add quote</button>
+
         </div>
     </div>
 </template>
 
 <style lang="scss">
-    h1{
+    h1 {
         margin: 0;
     }
 
-    .quote{
+    .quote {
         border: 1px solid;
         border-radius: 0.3em;
     }
@@ -121,11 +124,11 @@
         text-align: center;
         color: #2c3e50;
         display: grid;
-        grid-template-columns: 20em 1fr 20em 10em;
+        grid-template-columns: 20em 1fr 10em;
         grid-template-rows: 3em calc(100vh - 4em);
     }
 
-    .editor{
+    .editor {
         flex: 1;
     }
 
@@ -144,6 +147,11 @@
             flex: 1;
             border: none;
         }
+    }
+
+    .main-area {
+        display: block;
+        overflow-y: auto;
     }
 
     .folder-image-list {

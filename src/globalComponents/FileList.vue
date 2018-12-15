@@ -5,8 +5,24 @@
     const mime = require('mime');
 
     export default {
-        name:'FileList',
+        name: 'FileList',
+        data() {
+            const {value} = this;
+            return {
+                blocks: value,
+                draggableOptions:{
+                    draggable: '.block',
+                    group: {
+                        name: 'blocks'
+                    }
+                }
+            }
+        },
         props: {
+            value: {
+                type: Array,
+                default: _ => []
+            },
             extension: {
                 type: String,
                 default: 'jpg|png|avi',
@@ -16,45 +32,68 @@
                 default: './',
             }
         },
-        methods:{
-
-        },
         asyncComputed: {
-            async files() {
-                if (!this.$props.folderPath) return [];
-                const files = (await fastGlob.async([path.join(this.folderPath, `*.+(${this.extension})`)], {onlyFiles: true}))
-                    .map( path => ({path, mimetype: mime.getType(path)}));
-
+            async folderfiles({extension, folderPath}) {
+                if (!folderPath) return [];
+                const globTemplate = path.join(folderPath, `*.+(${extension})`);
+                const files = (await fastGlob.async([globTemplate], {onlyFiles: true}));
                 return files;
+            },
+        },
+        watch: {
+            /*update model with "block" */
+            folderfiles: function (files) {
+                this.blocks = files.map(path => {
+                    const mimeType = mime.getType(path);
+                    return {
+                        type: mimeType.replace(/\/.+/, ''),
+                        path,
+                        mimeType,
+                        comment: ''
+                    }
+                });
+                this.$emit('input', this.blocks);
             }
-        }
+        },
+        methods: {},
+
     }
 
 
 </script>
 
 <template>
-    <div class="file-list">
-        <div class="block" v-for="file in files" draggable="true" :key="file.path" >
-            <slot :file="file" >
+    <draggable v-model="blocks" class="file-list" :options="draggableOptions">
+        <div v-for="(block,index) in blocks"
+             class="block"
+             :id="`file-list-${index}`"
+             draggable="true" :key="block.path">
 
-                <video v-if="file.mimetype.match(/^video/)" autoplay loop :src="file.path"></video>
-                <img v-else-if="file.mimetype.match(/^image/)" :src="file.path" />
-                <span v-else>{{file.path}}</span>
+            <slot :file="block">
+
+                <video v-if="block.type === 'video'" autoplay loop :src="block.path"></video>
+                <figure v-else-if="block.type = 'image'">
+                    <img :src="block.path" draggable="false"/>
+                    <figcaption></figcaption>
+                </figure>
+
+
+                <span v-else>{{block.path}}</span>
 
             </slot>
         </div>
-    </div>
+    </draggable>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .file-list{
+    .file-list {
         width: 100%;
         overflow-y: auto;
 
     }
-    .block{
+
+    .block {
         /*border: 1px solid black;*/
         padding: 2px;
         margin-top: 4px;
@@ -62,7 +101,7 @@
 
     }
 
-    img,video{
+    img, video {
         width: 100%;
     }
 

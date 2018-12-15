@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import pageModuleStore from './stors/page-store'
 
 const {remote} = require('electron');
 const {dialog} = remote;
@@ -8,26 +9,19 @@ const {promises: fsp} = require("fs");
 const path = require('path');
 
 Vue.use(Vuex);
-var level = require('level');
-var db = level('./quotes',{ valueEncoding: 'json' });
+const level = require('level');
+const db = level('./quotes', {valueEncoding: 'json'});
+
 
 export default new Vuex.Store({
     state: {
-        rootPath: 'C:\\Users\\perym\\OneDrive\\Documents\\תן אמון במימון',
-        sectionList: [],
+        rootPath: '',
+        // sectionList: [],
         section: '',
         quotesList: [],
-        pages:{
-            section:[]
-        }
     },
-    getters:{
-        activePath(state){
-            return path.join(state.rootPath, state.section)
-        },
-        projectName(state){
-            return path.basename(state.rootPath)
-        }
+    modules: {
+        pages: pageModuleStore
     },
     mutations: {
         setQuotesList(state, newList) {
@@ -39,45 +33,58 @@ export default new Vuex.Store({
         setSectionsList(state, sections) {
             state.sectionList = sections;
         },
-        setRootPath(state,rootPath){
-            state.rootPath = rootPath;
+        setRootPath(state, cwd) {
+            state.rootPath = cwd;
         },
 
     },
+    getters: {
+        activePath(state) {
+            return path.join(state.rootPath, state.section)
+        },
+        projectName(state) {
+            return path.basename(state.rootPath)
+        },
+        async sectionList(state) {
+            const directoriesPaths = await fg.async([path.join(state.rootPath, '*')], {onlyDirectories: true});
+            return directoriesPaths.map(dp => path.basename(dp));
+        }
+    },
     actions: {
         async addNewQuotes({commit, state}, quote) {
-            const quotesList = [...state.quotesList,quote];
-            commit('setQuotesList',quotesList);
-            await db.put(state.section, quotesList );
+            const quotesList = [...state.quotesList, quote];
+            commit('setQuotesList', quotesList);
+            await db.put(state.section, quotesList);
         },
-        async editQuotes({commit, state}, {index,  quote}) {
-            state.quotesList.splice(index,1, quote);
+        async editQuotes({commit, state}, {index, quote}) {
+            state.quotesList.splice(index, 1, quote);
             const quotesList = [...state.quotesList];
-            commit('setQuotesList',quotesList);
-            await db.put(state.section, quotesList );
+            commit('setQuotesList', quotesList);
+            await db.put(state.section, quotesList);
         },
-        async changeRootPathByDialog({ commit, state }) {
-            let folderPath = dialog.showOpenDialog(remote.getCurrentWindow(), {
+        async changeRootPath({commit, state, getters, dispatch}, cwd){
+            commit('setRootPath', cwd);
+            const sections = await getters.sectionList;
+            dispatch('pages/setPages', sections);
+        },
+        async changeRootPathByDialog({commit, state, getters, dispatch}) {
+            let [cwd] = dialog.showOpenDialog(remote.getCurrentWindow(), {
                 properties: ['openDirectory']
             });
-            commit('setRootPath',folderPath[0]);
-
-            const directoryPaths = await fg.async([path.join(state.rootPath, '*')], {onlyDirectories: true});
-            const directories = directoryPaths.map(directoryPath => path.basename(directoryPath));
-            commit('setSectionsList',directories);
+            return dispatch('changeRootPath',cwd)
         },
-        async selectSection({ commit }, section) {
-            commit('changeSection',section);
-            try{
-                var quoteList  = await db.get(section);
-            }catch (e) {
-                if(!e.notFound){
+        async selectSection({commit}, section) {
+            commit('changeSection', section);
+            try {
+                var quoteList = await db.get(section);
+            } catch (e) {
+                if (!e.notFound) {
                     console.error(e);
                 }
                 quoteList = [];
             }
 
-            commit('setQuotesList',quoteList);
+            commit('setQuotesList', quoteList);
 
         },
     }
