@@ -3,9 +3,10 @@
         <h2>{{page.section}}</h2>
         <textarea class="preword" v-model="page.preword"></textarea>
         <button @click="addNewIssue(page)">add issue</button>
+
         <draggable v-model="page.issues" class="issues" :options="issueDraggableOption">
             <div class="issue"
-                 v-for="(issue,index) in issues(page)"
+                 v-for="(issue,index) in issues"
                  :key="issue.id">
 
                 <div class="handler">...</div>
@@ -14,12 +15,7 @@
                 <button @click="addNewBlock({issue,type:'quote'})">quote</button>
                 {{issue.id}}
                 <draggable v-model="issue.blocks" :options="blockDraggableOption">
-                    <div class="block"
-                         v-for="block in blocks(issue)"
-                         :key="block.id"
-                         :is="block.type+'Block'" :value="block">
-                        block {{block.id}}
-                    </div>
+                    <block v-for="(block,index) in blocks(issue)" :value="block" :key="block.id"></block>
                 </draggable>
             </div>
         </draggable>
@@ -27,42 +23,8 @@
 </template>
 
 <script type="text/jsx">
-    import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
+    import {mapMutations} from 'vuex'
     import Vue from "vue";
-
-    const TextBlock = Vue.component('TextBlock', {
-            functional: true,
-            render(h, {props: value}) {
-                return <div class="block">
-                    <div class="handler">...</div>
-                    quote block {value.content} {value.id}
-                </div>
-
-            }
-        }),
-        QuoteBlock = Vue.component('TextBlock', {
-            functional: true,
-            render(h, {props: value}) {
-                return <div class="block">
-                    <div class="handler">...</div>
-                    quote block {value.content} {value.id}
-                </div>
-            }
-        }),
-        ImageBlock = Vue.component('ImageBlock', {
-            functional: true,
-            render(h, {props}) {
-                return <div className="block">
-                    <div class="handler">...</div>
-                    <figure>
-                        <img /*src={props.block.src}*/ draggable="false"/>
-                        <figcaption></figcaption>
-                    </figure>
-                </div>
-            }
-        })
-    ;
-
 
     export default {
         name: 'page',
@@ -84,17 +46,29 @@
                 }
             }
         },
-        computed:{
-            ...mapGetters('pages', ['pages', 'issues', 'blocks'])
+        computed: {
+            issues: {
+                get() {
+                    return this.$store.getters['issues'](this.page)
+                },
+                set(values) {
+                    this.page.issues = values.map(val => val.id)
+                }
+            },
+            // blocks:{
+            //
+            // }
+
         },
         props: {
             value: Object
         },
-        components: {
-            TextBlock, ImageBlock, QuoteBlock
-        },
+        components: {        },
         methods: {
-            ...mapMutations('pages', ['addNewPage', 'addNewIssue', 'addNewBlock']),
+            ...mapMutations(['addNewPage', 'addNewIssue', 'addNewBlock']),
+            blocks(issue){
+                return this.$store.getters['blocks'](issue )
+            }
         }
     }
 </script>

@@ -7,15 +7,8 @@
     export default {
         name: 'FileList',
         data() {
-            const {value} = this;
             return {
-                blocks: value,
-                draggableOptions:{
-                    draggable: '.block',
-                    group: {
-                        name: 'blocks'
-                    }
-                }
+                paths: []
             }
         },
         props: {
@@ -32,30 +25,20 @@
                 default: './',
             }
         },
-        asyncComputed: {
-            async folderfiles({extension, folderPath}) {
+        asyncComputed: {},
+        watch: {
+            folderPath:'updatePathsFiles',
+            value(v) {return this.paths = v;}/*??*/
+        },
+        methods: {
+            async updatePathsFiles() {
+                const {extension, folderPath} = this;
                 if (!folderPath) return [];
                 const globTemplate = path.join(folderPath, `*.+(${extension})`);
-                const files = (await fastGlob.async([globTemplate], {onlyFiles: true}));
-                return files;
+                this.paths = (await fastGlob.async([globTemplate], {onlyFiles: true}));
+                this.$emit('input', this.paths);
             },
         },
-        watch: {
-            /*update model with "block" */
-            folderfiles: function (files) {
-                this.blocks = files.map(path => {
-                    const mimeType = mime.getType(path);
-                    return {
-                        type: mimeType.replace(/\/.+/, ''),
-                        path,
-                        mimeType,
-                        comment: ''
-                    }
-                });
-                this.$emit('input', this.blocks);
-            }
-        },
-        methods: {},
 
     }
 
@@ -63,26 +46,14 @@
 </script>
 
 <template>
-    <draggable v-model="blocks" class="file-list" :options="draggableOptions">
-        <div v-for="(block,index) in blocks"
-             class="block"
-             :id="`file-list-${index}`"
-             draggable="true" :key="block.path">
+    <div class="file-list">
+        <slot :paths="paths" >
+            <div v-for="(path,index) in paths">
+                {{index}} : {{path}}
+            </div>
+        </slot>
+    </div>
 
-            <slot :file="block">
-
-                <video v-if="block.type === 'video'" autoplay loop :src="block.path"></video>
-                <figure v-else-if="block.type = 'image'">
-                    <img :src="block.path" draggable="false"/>
-                    <figcaption></figcaption>
-                </figure>
-
-
-                <span v-else>{{block.path}}</span>
-
-            </slot>
-        </div>
-    </draggable>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -92,18 +63,4 @@
         overflow-y: auto;
 
     }
-
-    .block {
-        /*border: 1px solid black;*/
-        padding: 2px;
-        margin-top: 4px;
-        box-shadow: 0px 2px 4px #00000026;
-
-    }
-
-    img, video {
-        width: 100%;
-    }
-
-
 </style>

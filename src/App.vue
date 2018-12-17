@@ -10,56 +10,6 @@
 //
 //     return;
 // }-->
-
-<script>
-    import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
-    import Page from './components/Page'
-
-    const path = require('path');
-    const {promises: fsp} = require("fs");
-
-
-    export default {
-        name: 'app',
-        data: vm => ({
-            query: '',
-            newQuotes: '',
-            text: 'check it out!',
-            options: {}
-        }),
-        props: [],
-        computed: {
-            ...mapState(['rootPath', 'section', 'quotesList']),
-            ...mapGetters(['activePath', 'projectName', 'pages', 'issues', 'blocks']),
-            ...mapGetters('pages', ['pages', 'issues', 'blocks'])
-        },
-        asyncComputed: {...mapGetters(['sectionList'])},
-        components: {
-            Page
-        },
-        methods: {
-            // ... mapMutations(['addNewPage','addNewIssue','addNewBlock']),
-            ...mapMutations('pages', ['addNewPage', 'addNewIssue', 'addNewBlock']),
-            ...mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
-
-            async processEditOperation(operation) {
-                this.text = operation.api.origElements.innerHTML;
-                const savePath = path.join(this.activePath, 'content.html');
-                await fsp.writeFile(savePath, this.text)
-            },
-
-            // async drageend(event){
-            //     const elementID = event.dataTransfer.getData('element-id');
-            //     const path = event.dataTransfer.getData('path');
-            //     debugger;
-            // }
-        }
-
-
-    }
-</script>
-
-
 <template>
     <div id="app">
         <!-- TOP PANEL -->
@@ -68,10 +18,14 @@
             <h1>{{projectName}}</h1>
         </div>
 
-        <!-- LEFT -->
+        <!-- LEFT IMAGES FS-->
         <div class="panel">
             <h4>{{section}}</h4>
-            <file-list :folderPath="activePath"></file-list>
+            <file-list :folderPath="sectionPath" @input="setImagesPaths">
+                <draggable v-model="imagesPaths" :options="imageDraggableOptions">
+                    <block v-for="(block,index) in imagesBlocks" :value="block" :key="block.id"></block>
+                </draggable>
+            </file-list>
         </div>
 
         <!-- MAIN AREA -->
@@ -79,17 +33,14 @@
             <Page v-for="page in pages" :value="page"></Page>
         </div>
 
-        <!--<div class="panel">-->
-        <!--<folder-image-list :folderPath="imagesPath"></folder-image-list>-->
-        <!--</div>-->
 
         <div class="panel">
-
-            <div v-for="section in sectionList" :key="section"
+            <!-- SECTIONS -->
+            <div v-for="section in sections" :key="section"
                  @click="selectSection(section)">
                 {{section}}
             </div>
-
+            <!-- QUOTE AREA-->
             <input type="search" v-model="query">
 
             <medium-editor class="quote"
@@ -105,6 +56,83 @@
         </div>
     </div>
 </template>
+<script>
+    import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
+    import Page from './components/Page'
+    import blockFactory from "./factories/block";
+
+    const path = require('path');
+    const {promises: fsp} = require("fs");
+
+    function filterSrcPaths($store, paths) {
+        const globalBlocks = Object.values($store.state.pages.blocksMap);
+        const blocksImage = globalBlocks.filter(b => b.type === 'image');
+        const usedPaths = new Set(blocksImage.map(b => b.src));
+
+        const unsusedPaths = paths.filter(p => !usedPaths.has(p));
+        return unsusedPaths;
+
+    }
+
+    export default {
+        name: 'app',
+        data: vm => ({
+            query: '',
+            newQuotes: '',
+            imagesPaths: [],
+            imageDraggableOptions:{
+                draggable: '.block',
+                group: {
+                    name: 'blocks'
+                }
+            }
+        }),
+        props: [],
+        computed: {
+            imagesBlocks(){
+                return this.imagesPaths.map(path => blockFactory('image', {
+                    src: path
+                }));
+            },
+            ...mapState(['rootPath', 'section', 'quotesList']),
+            ...mapGetters(['sectionPath', 'projectName', 'pages', 'issues', 'blocks']),
+            ...mapGetters(['pagesSet', 'issues', 'blocks']),
+
+
+        },
+        asyncComputed: {...mapGetters(['sections'])},
+
+        methods: {
+            ...mapMutations(['addNewPage', 'addNewIssue', 'addNewBlock']),
+            ...mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
+
+            async processEditOperation(operation) {
+                this.text = operation.api.origElements.innerHTML;
+                const savePath = path.join(this.sectionPath, 'content.html');
+                await fsp.writeFile(savePath, this.text)
+            },
+
+            setImagesPaths(srcPaths){
+                this.imagesPaths = filterSrcPaths(this.$store, srcPaths);
+
+            }
+
+            // async drageend(event){
+            //     const elementID = event.dataTransfer.getData('element-id');
+            //     const path = event.dataTransfer.getData('path');
+            //     debugger;
+            // }
+        },
+        components: {
+            Page
+        },
+
+
+    }
+</script>
+
+
+
 
 <style lang="scss">
     h1 {
