@@ -30,11 +30,11 @@ const IssuePartModel = {
 
 /* PAGES */
 export default {
-    namespaced:false,
+    namespaced: false,
     state: {
         pagesMap: {},
         issuesMap: {},
-        blocksMap:{},
+        blocksMap: {},
         pagesList: [],
     },
     getters: {
@@ -43,11 +43,11 @@ export default {
             return pagesList.map(id => pagesMap[id])
         },
         issues({issuesMap}) {
-            return (page) =>{
+            return (page) => {
                 return page.issues.map(id => issuesMap[id])
             }
         },
-        blocks({}, getters, {blocksMap}, rootGetters) {
+        blocks({blocksMap}) {
             return (issue) => issue.blocks.map(id => blocksMap[id])
         }
     },
@@ -55,12 +55,12 @@ export default {
         setPages({state, commit}, pagesName = []) {
             commit('clearPages');
             pagesName.forEach(function (name) {
-                commit('addNewPage',name);
+                commit('addNewPage', name);
             })
         }
     },
     mutations: {
-        clearPages(state){
+        clearPages(state) {
             state.pagesMap = {};
             state.pagesList = [];
         },
@@ -86,11 +86,14 @@ export default {
             Vue.set(page.issues, 'blocks', []);
             return issue;
         },
-        addNewBlock(state, payload) {
-            var block  = blockFactory(payload);
+        addNewBlock(state, {issue, payload}) {
+            var block = blockFactory(payload);
             Vue.set(state.blocksMap, block.id, block);
-            Vue.set(issue.blocks, issue.blocks.length, id);
+            Vue.set(issue.blocks, issue.blocks.length, block.id);
             return block;
         },
+        addBlocks(state, blocks){
+            blocks.forEach( b => state.blocksMap[b.id] = b)
+        }
     },
 }

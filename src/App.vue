@@ -22,7 +22,7 @@
         <div class="panel">
             <h4>{{section}}</h4>
             <file-list :folderPath="sectionPath" @input="setImagesPaths">
-                <draggable v-model="imagesPaths" :options="imageDraggableOptions">
+                <draggable :value="imagesBlocks"  :options="imageDraggableOptions">
                     <block v-for="(block,index) in imagesBlocks" :value="block" :key="block.id"></block>
                 </draggable>
             </file-list>
@@ -63,6 +63,7 @@
 
     const path = require('path');
     const {promises: fsp} = require("fs");
+    var  temporaryBlockSave = null;
 
     function filterSrcPaths($store, paths) {
         const globalBlocks = Object.values($store.state.pages.blocksMap);
@@ -80,7 +81,7 @@
             query: '',
             newQuotes: '',
             imagesPaths: [],
-            imageDraggableOptions:{
+            imageDraggableOptions: {
                 draggable: '.block',
                 group: {
                     name: 'blocks'
@@ -89,7 +90,7 @@
         }),
         props: [],
         computed: {
-            imagesBlocks(){
+            imagesBlocks() {
                 return this.imagesPaths.map(path => blockFactory('image', {
                     src: path
                 }));
@@ -112,9 +113,13 @@
                 await fsp.writeFile(savePath, this.text)
             },
 
-            setImagesPaths(srcPaths){
+            setImagesPaths(srcPaths) {
                 this.imagesPaths = filterSrcPaths(this.$store, srcPaths);
 
+            },
+            cloneBlockImage(block) {
+                this.$store.commit('addBlockToMap', block);
+                return block.id;
             }
 
             // async drageend(event){
@@ -130,8 +135,6 @@
 
     }
 </script>
-
-
 
 
 <style lang="scss">

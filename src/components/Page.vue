@@ -5,29 +5,23 @@
         <button @click="addNewIssue(page)">add issue</button>
 
         <draggable v-model="page.issues" class="issues" :options="issueDraggableOption">
-            <div class="issue"
-                 v-for="(issue,index) in issues"
-                 :key="issue.id">
-
-                <div class="handler">...</div>
-                <button @click="addNewBlock({issue,type:'text'})">text</button>
-                <button @click="addNewBlock({issue,type:'image'})">image</button>
-                <button @click="addNewBlock({issue,type:'quote'})">quote</button>
-                {{issue.id}}
-                <draggable v-model="issue.blocks" :options="blockDraggableOption">
-                    <block v-for="(block,index) in blocks(issue)" :value="block" :key="block.id"></block>
-                </draggable>
-            </div>
+            <issue  v-for="(issue,index) in issues" :value="issue" :key="issue.id"></issue>
         </draggable>
     </div>
 </template>
 
+
+
 <script type="text/jsx">
     import {mapMutations} from 'vuex'
     import Vue from "vue";
+    import Issue from './Issue';
 
     export default {
         name: 'page',
+        props: {
+            value: Object
+        },
         data() {
             return {
                 page: this.$props.value,
@@ -36,14 +30,10 @@
                     handle: '.handler',
                     group: {
                         name: 'issues'
-                    }
+                    },
+
+
                 },
-                blockDraggableOption: {
-                    draggable: '.block',
-                    group: {
-                        name: 'blocks'
-                    }
-                }
             }
         },
         computed: {
@@ -55,20 +45,11 @@
                     this.page.issues = values.map(val => val.id)
                 }
             },
-            // blocks:{
-            //
-            // }
+        },
 
-        },
-        props: {
-            value: Object
-        },
-        components: {        },
+        components: {   Issue     },
         methods: {
-            ...mapMutations(['addNewPage', 'addNewIssue', 'addNewBlock']),
-            blocks(issue){
-                return this.$store.getters['blocks'](issue )
-            }
+            ...mapMutations(['addNewIssue']),
         }
     }
 </script>
