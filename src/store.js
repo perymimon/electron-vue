@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import pageModuleStore from './stors/page-store'
-import quoteModuleStore from './stors/quotes-store'
 
 const {remote} = require('electron');
 const {dialog} = remote;
@@ -47,7 +46,6 @@ export default new Vuex.Store({
 
         async selectSection({commit,dispatch}, section) {
             commit('setSection', section);
-            return dispatch('quotes/loadSectionQuoteDB',section)
         },
     },
     mutations: {
@@ -60,6 +58,5 @@ export default new Vuex.Store({
     },
     modules: {
         pages: pageModuleStore,
-        quotes: quoteModuleStore,
     },
 })

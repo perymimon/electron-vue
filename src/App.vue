@@ -47,19 +47,31 @@
             <!-- QUOTE AREA-->
             <input type="search" v-model="query">
 
-            <medium-editor class="quote"
-                           v-for="(value, index) of quotesList"
-                           :text="value"
-                           @edit="editQuotes({index, quote:$event.api.origElements.innerHTML})">
-                {{value}}
-            </medium-editor>
+            <div class="quote-list">
 
-            <textarea v-model.lazy="newQuotes"></textarea>
-            <button @click="addNewQuotes(newQuotes)">add quote</button>
+                <textarea v-model.lazy="newQuotes"></textarea>
+                <button @click="addNewQuotes(newQuotes)">add quote</button>
+
+                <db-list :dbName="section" v-model="quoteBlocks">
+                    <!--<medium-editor v-for="(value, index) of quoteList"-->
+                                   <!--class="quote"-->
+                                   <!--:text="value"-->
+                                   <!--@edit="editQuotes({index, quote:$event.api.origElements.innerHTML})">-->
+                    <div v-for="(block, index) of quoteBlocks">
+                        {{block.value}}
+                    </div>
+
+                    <!--</medium-editor>-->
+                </db-list>
+
+            </div>
+
 
         </div>
     </div>
+
 </template>
+
 <script>
     import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
     import Page from './components/Page'
@@ -85,6 +97,7 @@
             query: '',
             newQuotes: '',
             imagesPaths: [],
+            quoteBlocks: [],
             imageDraggableOptions: {
                 draggable: '.block',
                 group: {
@@ -131,7 +144,13 @@
             cloneBlockImage(block) {
                 this.$store.commit('addBlockToMap', block);
                 return block.id;
+            },
+            addNewQuotes(quote) {
+                this.$set(this.quoteBlocks,this.quoteBlocks.length, blockFactory('quote', {
+                    value: quote,
+                }))
             }
+
 
             // async drageend(event){
             //     const elementID = event.dataTransfer.getData('element-id');
@@ -200,4 +219,10 @@
         overflow-y: auto;
     }
 
+    .quote-list {
+        border: 1px solid beige;
+        min-height: 30em;
+        background: darkgray;
+        margin: .4em 0;
+    }
 </style>
