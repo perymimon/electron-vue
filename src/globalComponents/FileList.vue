@@ -1,3 +1,14 @@
+<template>
+    <div class="file-list">
+        <slot :paths="paths" >
+            <div v-for="(path,index) in paths">
+                {{index}} : {{path}}
+            </div>
+        </slot>
+    </div>
+
+</template>
+
 <script>
     const {promises: fsp} = require("fs");
     const path = require('path');
@@ -18,7 +29,7 @@
             },
             extension: {
                 type: String,
-                default: 'jpg|png|avi',
+                default: '*',
             },
             folderPath: {
                 type: String,
@@ -41,20 +52,9 @@
         },
 
     }
-
-
 </script>
 
-<template>
-    <div class="file-list">
-        <slot :paths="paths" >
-            <div v-for="(path,index) in paths">
-                {{index}} : {{path}}
-            </div>
-        </slot>
-    </div>
 
-</template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">

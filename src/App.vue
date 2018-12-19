@@ -21,9 +21,13 @@
         <!-- LEFT IMAGES FS-->
         <div class="panel">
             <h4>{{section}}</h4>
-            <file-list :folderPath="sectionPath" @input="setImagesPaths">
-                <draggable :value="imagesBlocks"  :options="imageDraggableOptions">
-                    <block v-for="(block,index) in imagesBlocks" :value="block" :key="block.id"></block>
+            <file-list :folderPath="sectionPath" @input="setImagesPaths" extension="jpg|png|avi">
+                <draggable v-model="imagesBlocks"
+                           :options="imageDraggableOptions">
+
+                    <block v-for="(block,index) in imagesBlocks"
+                           :value="block" :key="block.id"></block>
+
                 </draggable>
             </file-list>
         </div>
@@ -63,7 +67,7 @@
 
     const path = require('path');
     const {promises: fsp} = require("fs");
-    var  temporaryBlockSave = null;
+    var temporaryBlockSave = null;
 
     function filterSrcPaths($store, paths) {
         const globalBlocks = Object.values($store.state.pages.blocksMap);
@@ -90,10 +94,17 @@
         }),
         props: [],
         computed: {
-            imagesBlocks() {
-                return this.imagesPaths.map(path => blockFactory('image', {
-                    src: path
-                }));
+            imagesBlocks: {
+                get() {
+                    return this.imagesPaths.map(path => blockFactory('image', {
+                        src: path
+                    }));
+                },
+                set(blocks) {
+                    console.log(blocks);
+                    this.imagesPaths = blocks.map(v => v.src);
+                }
+
             },
             ...mapState(['rootPath', 'section', 'quotesList']),
             ...mapGetters(['sectionPath', 'projectName', 'pages', 'issues', 'blocks']),

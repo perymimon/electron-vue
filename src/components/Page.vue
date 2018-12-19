@@ -4,8 +4,11 @@
         <textarea class="preword" v-model="page.preword"></textarea>
         <button @click="addNewIssue(page)">add issue</button>
 
-        <draggable v-model="page.issues" class="issues" :options="issueDraggableOption">
-            <issue  v-for="(issue,index) in issues" :value="issue" :key="issue.id"></issue>
+        <draggable v-model="page.issues"
+                   class="issues" :options="issueDraggableOption">
+            <issue  v-for="(issue,index) in issues"
+                    :value="issue"
+                    :key="issue.id"></issue>
         </draggable>
     </div>
 </template>
