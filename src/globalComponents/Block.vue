@@ -2,7 +2,7 @@
     <div class="block" :class="block.type">
         <div class="handler">...</div>
         <template v-if="block.type=='text'">
-            quote block {{block.content}} {{block}.id}
+            quote block {{block.content}} {{block.id}}
         </template>
         <template v-else-if="block.type=='quote'">
             quote block {{block.content}} {{block.id}}
