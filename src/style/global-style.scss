@@ -1,0 +1,60 @@
+.page{
+  direction: rtl;
+  border: 0 ;
+  margin: 3.75pt;
+  margin-bottom: 7.5pt;
+  box-shadow: 0 0 0 0.75pt #d1d1d1, 0 0 3pt 0.75pt #ccc;
+  padding: 0.1em;
+  height: 1123px;
+  max-width: 794px;;
+  margin: 0 auto;
+
+  h2{
+    letter-spacing: 0.1em;
+    background: darkgray;
+    text-align: start;
+    padding: 0 0.5em ;
+  }
+
+  .issues {
+    min-height: 10rem;
+    border: 1px solid black;
+
+
+    .issue {
+      min-height: 5rem;
+      margin: 0.2em 0;
+
+    }
+    .blocks{
+
+      .block{
+        text-align: start;
+        padding: 0.5em;
+      }
+
+      .block.quote{
+        font-family: monospace;
+        font-style: italic;
+
+        &:before{
+          content: open-quote;
+        }
+        &:after{
+          content: close-quote;
+        }
+      }
+
+      .block.image{
+
+      }
+
+      .block.text{
+
+      }
+
+    }
+
+  }
+
+}

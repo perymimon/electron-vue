@@ -7,7 +7,7 @@
 
         {{issue.id}}
 
-        <draggable v-model="blocks" :options="blockDraggableOption" >
+        <draggable class="blocks" v-model="blocks" :options="blockDraggableOption" >
             <block v-for="(block,index) in blocks" :value="block" :key="block.id"></block>
         </draggable>
     </div>

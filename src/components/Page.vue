@@ -59,10 +59,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .page {
-        border: 1px solid;
-        min-height: 20rem;
-    }
 
     .handler {
         display: block;
@@ -73,20 +69,6 @@
         background: #5b626f;
     }
 
-    .issues {
-        min-height: 10rem;
-        background-color: lightgray;
 
-        .issue {
-            min-height: 5rem;
-            background-color: cornflowerblue;
-            margin: 0.1em 0;
-        }
-    }
-
-    .block {
-        overflow: hidden;
-        border: 1px solid white;
-    }
 
 </style>

@@ -16,6 +16,9 @@
         <div class="panel top-panel">
             <button @click="changeRootPathByDialog">open</button>
             <h1>{{projectName}}</h1>
+            <button class="save-to-html" @click="saveToHTML">Save to html</button>
+            <button class="save-to-pdf" @click="saveToPDF">Save to pdf</button>
+            <button class="save-window-to-pdf" @click="saveWebContentPDF">Save window to pdf</button>
         </div>
 
         <!-- LEFT IMAGES FS-->
@@ -33,7 +36,7 @@
         </div>
 
         <!-- MAIN AREA -->
-        <div class="panel main-area">
+        <div class="panel main-area" ref="mainDocument">
             <Page v-for="page in pages" :value="page"></Page>
         </div>
 
@@ -78,6 +81,7 @@
     import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
     import Page from './components/Page'
     import blockFactory from "./factories/block";
+    import {saveDOMtoHTML, saveHTMLToPDF, saveWebContentPDF} from "./jobs/prints";
 
     const path = require('path');
     const {promises: fsp} = require("fs");
@@ -98,6 +102,7 @@
         data: vm => ({
             query: '',
             newQuotes: '',
+            documentName: 'document',
             imagesPaths: [],
             quoteBlocks: [],
             imageDraggableOptions: {
@@ -151,14 +156,26 @@
                 this.$set(this.quoteBlocks, this.quoteBlocks.length, blockFactory('quote', {
                     content: quote,
                 }))
+            },
+            async saveToHTML() {
+                const {$refs, documentName, rootPath} = this;
+                await saveDOMtoHTML($refs.mainDocument,
+                    `${rootPath}/${documentName}.html`
+                );
+                console.log('Write HTML successfully.')
+            },
+            saveToPDF() {
+                const {$refs, documentName, rootPath} = this;
+                saveHTMLToPDF(`${rootPath}/${documentName}.html`, `${rootPath}/${documentName}.pdf`);
+                console.log('Write PDF successfully.')
+            },
+            saveWebContentPDF(){
+                const {$refs, documentName, rootPath} = this;
+                saveWebContentPDF(`${rootPath}/${documentName}.pdf`);
+                console.log('Write PDF successfully.')
             }
 
 
-            // async drageend(event){
-            //     const elementID = event.dataTransfer.getData('element-id');
-            //     const path = event.dataTransfer.getData('path');
-            //     debugger;
-            // }
         },
         components: {
             Page
@@ -174,10 +191,6 @@
         margin: 0;
     }
 
-    .quote {
-        border: 1px solid;
-        border-radius: 0.3em;
-    }
 
     #app {
         height: 100vh;

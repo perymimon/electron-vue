@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from './store'
 import AsyncComputed from 'vue-async-computed'
 import draggable from 'vuedraggable'
-
+import './style/global-style.scss'
 // param 0: The relative path of the components folder
 // param 1: Whether or not to look in subfolders
 // param 2: The regular expression used to match base component filenames

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    const {promises: fsp} = require("fs");
+    const {fsp} = require("fs").promises;
     const path = require('path');
     const fastGlob = require('fast-glob');
     const mime = require('mime');

@@ -1,5 +1,5 @@
 <template>
-    <div class="block">
+    <div class="block" :class="block.type">
         <div class="handler">...</div>
         <template v-if="block.type=='text'">
             quote block {{block.content}} {{block}.id}
@@ -38,14 +38,20 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .block {
-        /*border: 1px solid black;*/
-        padding: 2px;
-        margin-top: 4px;
-        box-shadow: 0px 2px 4px #00000026;
 
+    .block{
+        position: relative;
     }
-
+    .handler{
+        position: absolute;
+        left: 0.2em;
+        top:.1em;
+        bottom: .1em;
+        width: 10px;
+        background: cornflowerblue;
+        cursor: move;
+        border-radius: 0.2em;
+    }
     img, video {
         width: 100%;
     }

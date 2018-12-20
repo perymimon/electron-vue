@@ -63,6 +63,17 @@ app.on('ready', async () => {
   createWindow()
 });
 
+// // Stop Electron on SIG*
+// process.on('exit', code => electronApp.exit(code))
+
+// Passthrough error handler to silence Electron GUI prompt
+// process.on('uncaughtException', err => {
+//     if (this.reslientMode) {
+//     } else {
+//         throw err
+//     }
+// })
+
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
@@ -77,3 +88,4 @@ if (isDevelopment) {
     })
   }
 }
+
