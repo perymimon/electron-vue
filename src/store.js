@@ -45,7 +45,7 @@ export default new Vuex.Store({
         },
 
         async selectSection({commit,dispatch}, section) {
-            commit('setSection', section);
+             commit('setSection', section);
         },
     },
     mutations: {

@@ -2,10 +2,10 @@
     <div class="block">
         <div class="handler">...</div>
         <template v-if="block.type=='text'">
-            quote block {value.content} {value.id}
+            quote block {{block.content}} {{block}.id}
         </template>
         <template v-else-if="block.type=='quote'">
-            quote block {value.content} {value.id}
+            quote block {{block.content}} {{block.id}}
         </template>
         <template v-else-if="block.type='image'">
             <figure>
@@ -29,7 +29,10 @@
         },
         props: {
             value: Object
-        }
+        },
+        watch:{
+          value() {this.block = value; }
+        },
     }
 </script>
 

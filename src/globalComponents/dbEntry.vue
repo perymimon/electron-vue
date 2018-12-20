@@ -10,12 +10,19 @@
 </template>
 
 <script>
-
+    const DB_FILE_NAME = './quotes';
     const level = require('level');
-    const db = level('./quotes', {valueEncoding: 'json'});
+    const db = level(DB_FILE_NAME, {valueEncoding: 'json'});
+    import { remote } from 'electron'
+    //
+    // // Close DB when all windows are closed.
+    remote.getCurrentWindow().on('close', (event) => {
+        db.close();
+    });
+
 
     export default {
-        name: 'dbList',
+        name: 'dbEntry',
         data() {
             return {
                 records: []
@@ -55,8 +62,7 @@
                 this.$emit('input', recordsList);
             },
         },
-
-    }
+     }
 </script>
 
 

@@ -52,17 +52,19 @@
                 <textarea v-model.lazy="newQuotes"></textarea>
                 <button @click="addNewQuotes(newQuotes)">add quote</button>
 
-                <db-list :dbName="section" v-model="quoteBlocks">
+                <db-entry :dbName="section" v-model="quoteBlocks">
                     <!--<medium-editor v-for="(value, index) of quoteList"-->
-                                   <!--class="quote"-->
-                                   <!--:text="value"-->
-                                   <!--@edit="editQuotes({index, quote:$event.api.origElements.innerHTML})">-->
-                    <div v-for="(block, index) of quoteBlocks">
-                        {{block.value}}
-                    </div>
+                    <!--class="quote"-->
+                    <!--:text="value"-->
+                    <!--@edit="editQuotes({index, quote:$event.api.origElements.innerHTML})">-->
+                    <draggable v-model="quoteBlocks"
+                               :options="imageDraggableOptions">
+                        <block v-for="(block, index) of quoteBlocks" :value="block" :key="block.id">
 
+                        </block>
+                    </draggable>
                     <!--</medium-editor>-->
-                </db-list>
+                </db-entry>
 
             </div>
 
@@ -146,8 +148,8 @@
                 return block.id;
             },
             addNewQuotes(quote) {
-                this.$set(this.quoteBlocks,this.quoteBlocks.length, blockFactory('quote', {
-                    value: quote,
+                this.$set(this.quoteBlocks, this.quoteBlocks.length, blockFactory('quote', {
+                    content: quote,
                 }))
             }
 
