@@ -4,12 +4,12 @@
         <textarea class="preword" v-model="page.preword"></textarea>
         <button @click="addNewIssue(page)">add issue</button>
 
-        <draggable v-model="page.issues"
-                   class="issues" :options="issueDraggableOption">
+        <!--<draggable v-model="page.issues"-->
+                   <!--class="issues" :options="issueDraggableOption">-->
             <issue  v-for="(issue,index) in issues"
                     :value="issue"
                     :key="issue.id"></issue>
-        </draggable>
+        <!--</draggable>-->
     </div>
 </template>
 
@@ -17,7 +17,6 @@
 
 <script type="text/jsx">
     import {mapMutations} from 'vuex'
-    import Vue from "vue";
     import Issue from './Issue';
 
     export default {
@@ -60,14 +59,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
-    .handler {
-        display: block;
-        clear: both;
-        float: left;
-        height: 100%;
-        padding: 2px 0;
-        background: #5b626f;
-    }
+
 
 
 

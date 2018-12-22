@@ -1,6 +1,6 @@
 <template>
     <div class="issue">
-        <div class="handler">...</div>
+        <!--<div class="handler"><icon icon="grip-vertical"></icon></div>-->
         <button @click="addNewBlock({issue,payload:{type:'text'}})">text</button>
         <button @click="addNewBlock({issue,payload:{type:'image',src:'abc'}})">image</button>
         <button @click="addNewBlock({issue,payload:{type:'quote'}})">quote</button>
@@ -25,13 +25,7 @@
         data() {
             return {
                 issue: this.value,
-                blockDraggableOption: {
-                    draggable: '.block',
-                    handle: '.handler',
-                    group: {
-                        name: 'blocks'
-                    },
-                }
+
             }
         },
         computed: {
@@ -55,6 +49,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+.issue{
+    position: relative;
+}
 
 </style>

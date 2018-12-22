@@ -2,8 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 import AsyncComputed from 'vue-async-computed'
-import draggable from 'vuedraggable'
+
+import './addon/draggable'
+import './addon/font-awesome'
+import './addon/medium-editor'
+
 import './style/global-style.scss'
+
+Vue.config.productionTip = false;
+
 // param 0: The relative path of the components folder
 // param 1: Whether or not to look in subfolders
 // param 2: The regular expression used to match base component filenames
@@ -25,16 +32,7 @@ requireComponent.keys().forEach(fileName => {
     Vue.component(componentName, componentConfig.default || componentConfig )
 });
 
-import editor from 'vue2-medium-editor'
-import 'medium-editor/dist/css/medium-editor.css'
-import 'medium-editor/dist/css/themes/default.css'
-
-Vue.config.productionTip = false;
 Vue.use(AsyncComputed);
-
-// Vue.component('FileList', FileList);
-Vue.component('medium-editor', editor);
-Vue.component('draggable', draggable);
 
 new Vue({
     store,

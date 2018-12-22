@@ -87,7 +87,7 @@ export default {
             return issue;
         },
         addNewBlock(state, {issue, payload}) {
-            var block = blockFactory(payload);
+            var block = blockFactory(payload.type, payload);
             Vue.set(state.blocksMap, block.id, block);
             Vue.set(issue.blocks, issue.blocks.length, block.id);
             return block;

@@ -5,7 +5,7 @@ export default function blockFactory(type, payload) {
         id:shortid.generate(),
         type:type || payload.type|| 'text',
         comment:'',
-    },payload)
+    },payload || type)
 }
 
 

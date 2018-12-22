@@ -1,4 +1,7 @@
 # electron-vue
+shorcut
+
+[vue font-awesome reference](https://www.npmjs.com/package/@fortawesome/vue-fontawesome)
 
 ## Project setup
 ```

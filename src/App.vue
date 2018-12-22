@@ -226,8 +226,9 @@
     }
 
     .main-area {
-        display: block;
+        display: flex;
         overflow-y: auto;
+        align-items: center;
     }
 
     .folder-image-list {
