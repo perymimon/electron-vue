@@ -33,9 +33,6 @@
         padding-left: 15px;
     }
 
-    figcaption textarea {
-        width: 100%;
-    }
 
     img, video {
         width: 100%;
