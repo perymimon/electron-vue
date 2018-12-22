@@ -1,13 +1,14 @@
 <template>
     <div class="issue">
         <!--<div class="handler"><icon icon="grip-vertical"></icon></div>-->
-        <button @click="addNewBlock({issue,payload:{type:'text'}})">text</button>
-        <button @click="addNewBlock({issue,payload:{type:'image',src:'abc'}})">image</button>
-        <button @click="addNewBlock({issue,payload:{type:'quote'}})">quote</button>
-
+        <div class="toolbar">
+            <button @click="addNewBlock({issue,payload:{type:'text'}})">text</button>
+            <button @click="addNewBlock({issue,payload:{type:'image',src:'abc'}})">image</button>
+            <button @click="addNewBlock({issue,payload:{type:'quote'}})">quote</button>
+        </div>
         {{issue.id}}
 
-        <draggable class="blocks" v-model="blocks" :options="blockDraggableOption" >
+        <draggable class="blocks" v-model="blocks" :options="draggableOption">
             <block v-for="(block,index) in blocks" :value="block" :key="block.id"></block>
         </draggable>
     </div>
@@ -49,8 +50,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.issue{
-    position: relative;
-}
+    .issue {
+        position: relative;
+        /*display: flex;*/
+        /*flex-direction: column;*/
+    }
+
+    .blocks {
+        /*flex: 1;*/
+    }
 
 </style>

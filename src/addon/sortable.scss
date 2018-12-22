@@ -1,0 +1,69 @@
+$color-1: #262657;
+$color-2: #a8aaa6;
+
+/* Class name for the chosen item */
+.sortable-chosen {
+
+
+  .handler {
+    cursor: -webkit-grabbing;
+  }
+}
+
+/* Class name for the drop placeholder */
+.sortable-ghost {
+  ////height: 0px !important;
+  //border: 2px solid currentColor;
+  //box-sizing: border-box;
+  //padding: 0 !important;
+  //background: $color-2;
+  //
+  //color: $color-1;
+  //
+  //*:not(::before,::after) {
+  //  display: none;
+  //}
+  //
+  //&:before, &:after {
+  //  content: '';
+  //  display: block;
+  //  width: 10px;height: 10px;
+  //  background: currentColor;
+  //  position: absolute;
+  //  top:50%;
+  //  transform: translateY(-50%);
+  //  border-radius: 50%;
+  //}
+  //&:before{
+  //  left:100%
+  //}
+  //&:after{
+  //  right: 100%;
+  //}
+
+  .handler {
+    display: none !important;
+  }
+}
+
+
+/* Class name for the dragging item */
+.sortable-drag {
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    background: $color-1;
+  }
+
+
+}
+
+.sortable-fallback {
+
+}
+

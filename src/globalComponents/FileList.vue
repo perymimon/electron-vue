@@ -59,8 +59,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .file-list {
-        width: 100%;
         overflow-y: auto;
+        padding: 5px 10px;
+        width: calc( 100% - 20px );
+        box-sizing: border-box;
 
     }
 </style>

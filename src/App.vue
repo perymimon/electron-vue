@@ -24,9 +24,9 @@
         <!-- LEFT IMAGES FS-->
         <div class="panel">
             <h4>{{section}}</h4>
-            <file-list :folderPath="sectionPath" @input="setImagesPaths" extension="jpg|png|avi">
+            <file-list class="folder-image-list" :folderPath="sectionPath" @input="setImagesPaths" extension="jpg|png|avi">
                 <draggable v-model="imagesBlocks"
-                           :options="imageDraggableOptions">
+                           :options="draggableOption">
 
                     <block v-for="(block,index) in imagesBlocks"
                            :value="block" :key="block.id"></block>
@@ -226,13 +226,18 @@
     }
 
     .main-area {
-        display: flex;
+        display: grid;
         overflow-y: auto;
         align-items: center;
+        justify-content: center;
+        grid-auto-rows: minmax(max-content, auto);
     }
 
     .folder-image-list {
         overflow-y: auto;
+        figcaption{
+            font-size: small;
+        }
     }
 
     .quote-list {

@@ -17,6 +17,7 @@
 
 <script type="text/jsx">
     import {mapMutations} from 'vuex'
+    import './Page.style.scss'
     import Issue from './Issue';
 
     export default {
@@ -56,11 +57,3 @@
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-
-
-
-
-
-</style>

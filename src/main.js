@@ -3,7 +3,7 @@ import App from './App.vue'
 import store from './store'
 import AsyncComputed from 'vue-async-computed'
 
-import './addon/draggable'
+import './addon/sortable'
 import './addon/font-awesome'
 import './addon/medium-editor'
 

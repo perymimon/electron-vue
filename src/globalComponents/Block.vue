@@ -1,6 +1,8 @@
 <template>
     <div class="block" :class="block.type">
-        <div class="handler"><icon icon="grip-vertical"></icon></div>
+        <div class="handler">
+            <icon icon="grip-vertical"></icon>
+        </div>
 
         <template v-if="block.type == 'text'">
             <medium-editor :text="block.comment"></medium-editor>
@@ -14,9 +16,7 @@
         <template v-else-if="block.type='image'">
             <figure>
                 <img :src="block.src" draggable="false"/>
-                <figcaption>
-                    <medium-editor :text="block.comment"></medium-editor>
-                </figcaption>
+                <medium-editor :text="block.comment" custom-tag="figcaption"></medium-editor>
             </figure>
         </template>
 
@@ -28,17 +28,19 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 
-    .block{
+    .block {
         position: relative;
         padding-left: 15px;
     }
-    figcaption textarea{
+
+    figcaption textarea {
         width: 100%;
     }
 
     img, video {
         width: 100%;
     }
+
     .handler {
         position: absolute;
         left: 0.2em;
@@ -68,8 +70,10 @@
         props: {
             value: Object
         },
-        watch:{
-          value() {this.block = value; }
+        watch: {
+            value() {
+                this.block = value;
+            }
         },
     }
 </script>
