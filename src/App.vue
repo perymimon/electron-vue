@@ -161,6 +161,7 @@
     import Page from './components/Page'
     import blockFactory from "./factories/block";
     import {saveDOMtoHTML, saveHTMLToPDF, saveWebContentPDF} from "./jobs/prints";
+    import Intersect from 'vue-intersect'
 
     const path = require('path');
     const {promises: fsp} = require("fs");
@@ -257,7 +258,7 @@
 
         },
         components: {
-            Page
+            Page,Intersect
         },
 
 

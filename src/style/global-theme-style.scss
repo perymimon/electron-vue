@@ -49,6 +49,12 @@ button {
   font-size: 14px;
   border-radius: 4px;
 
+  &:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+  }
+
   * {
     vertical-align: center;
   }

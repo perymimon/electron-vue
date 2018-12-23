@@ -51,7 +51,6 @@
         justify-content: center;
         color: gray;
         justify-items: center;
-        cursor: -webkit-grab;
     }
 
 </style>

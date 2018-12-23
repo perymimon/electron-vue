@@ -1,6 +1,8 @@
-$color-1: #262657;
-$color-2: #a8aaa6;
+@import "../style/variables";
 
+.handler {
+  cursor: grab;
+}
 /* Class name for the chosen item */
 .sortable-chosen {
 
@@ -12,6 +14,7 @@ $color-2: #a8aaa6;
 
 /* Class name for the drop placeholder */
 .sortable-ghost {
+  border: $dragndrop-cool-border;
   ////height: 0px !important;
   //border: 2px solid currentColor;
   //box-sizing: border-box;
@@ -49,15 +52,13 @@ $color-2: #a8aaa6;
 
 /* Class name for the dragging item */
 .sortable-drag {
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 4px;
-    background: $color-1;
+  border: $dragndrop-natual-border;
+  border-left: 2px solid $dragndrop-cool-color;
+  box-shadow: 0 3px 4px rgba(116, 116, 0, .3);
+  background: $bg-natual-color;
+  cursor: -webkit-grabbing;
+  .handler {
+    cursor: -webkit-grabbing;
   }
 
 

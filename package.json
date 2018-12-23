@@ -24,6 +24,7 @@
     "shortid": "^2.2.14",
     "vue": "^2.5.17",
     "vue-async-computed": "^3.5.0",
+    "vue-intersect": "^1.1.2",
     "vue2-medium-editor": "*",
     "vuedraggable": "^2.17.0",
     "vuex": "^3.0.1"
