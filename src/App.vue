@@ -1,5 +1,5 @@
 <template>
-    <div id="app" dir="rtl">
+    <div id="app" dir="rtl" >
         <!-- TOP PANEL -->
         <div class="panel top-panel kix-document-top-shadow-inner">
             <button @click="changeRootPathByDialog">
@@ -37,7 +37,16 @@
 
         <!-- MAIN AREA -->
         <div class="panel main-area" ref="mainDocument">
-            <Page v-for="page in pages" :value="page"></Page>
+            <template v-for="page in pages" v-cloak>
+                <Intersect @enter="log('enter '+page.section)"
+                           @leave="log('leave '+page.section)"
+                           :root="$refs.mainDocument"
+                           root-margin="-20% 0px -80% 0px"
+                           :threshold="[0]">
+                    <Page  :value="page"></Page>
+                </Intersect>
+            </template>
+
         </div>
 
 
@@ -217,7 +226,9 @@
         methods: {
             ...mapMutations(['addNewPage', 'addNewIssue', 'addNewBlock']),
             ...mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
-
+            log(msg){
+                console.log(msg);
+            },
             async processEditOperation(operation) {
                 this.text = operation.api.origElements.innerHTML;
                 const savePath = path.join(this.sectionPath, 'content.html');

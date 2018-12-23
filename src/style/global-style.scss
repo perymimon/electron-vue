@@ -35,3 +35,7 @@ figcaption{
 }
 
 @import "./global-theme-style";
+/*----------------------------- base classes ------------------------*/
+[v-cloak]{
+  display: none;
+}
