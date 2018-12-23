@@ -1,5 +1,5 @@
 <template>
-    <div id="app" dir="rtl" >
+    <div id="app" dir="rtl">
         <!-- TOP PANEL -->
         <div class="panel top-panel kix-document-top-shadow-inner">
             <button @click="changeRootPathByDialog">
@@ -11,7 +11,7 @@
                 <input type="text" v-model="projectName">
             </h1>
             <!--<button class="save-to-html" @click="saveToHTML">-->
-                <!--Save to html-->
+            <!--Save to html-->
             <!--</button>-->
             <!--<button class="save-to-pdf" @click="saveToPDF">Save to pdf</button>-->
             <button class="save-window-to-pdf" @click="saveWebContentPDF">
@@ -22,35 +22,34 @@
         </div>
 
         <!-- LEFT IMAGES FS-->
-        <div class="panel panel-left">
+        <div class="panel panel-start">
             <h4>{{section}}</h4>
-            <file-list class="folder-image-list" :folderPath="sectionPath" @input="setImagesPaths" extension="jpg|png|avi">
+            <file-list class="folder-image-list" :folderPath="sectionPath" @input="setImagesPaths"
+                       extension="jpg|png|avi">
                 <draggable v-model="imagesBlocks"
                            :options="draggableOption">
-
-                    <block v-for="(block,index) in imagesBlocks"
-                           :value="block" :key="block.id"></block>
-
+                        <block v-for="(block,index) in imagesBlocks"
+                               :value="block" :key="block.id"></block>
                 </draggable>
             </file-list>
         </div>
 
         <!-- MAIN AREA -->
         <div class="panel main-area" ref="mainDocument">
-            <template v-for="page in pages" v-cloak>
-                <Intersect @enter="log('enter '+page.section)"
-                           @leave="log('leave '+page.section)"
-                           :root="$refs.mainDocument"
-                           root-margin="-20% 0px -80% 0px"
-                           :threshold="[0]">
-                    <Page  :value="page"></Page>
-                </Intersect>
-            </template>
-
+            <Intersect v-for="page in pages"
+                       v-cloak
+                       :key="page.section"
+                       @enter="selectSection(page.section)"
+                       @leave=""
+                       :root="$refs.mainDocument"
+                       root-margin="-20% 0px -80% 0px"
+                       :threshold="[0]">
+                <Page :value="page" :key="page.section"></Page>
+            </Intersect>
         </div>
 
 
-        <div class="panel panel-right">
+        <div class="panel panel-end">
             <!-- SECTIONS -->
             <div v-for="section in sections" :key="section"
                  @click="selectSection(section)">
@@ -152,7 +151,8 @@
 
     .folder-image-list {
         overflow-y: auto;
-        figcaption{
+
+        figcaption {
             font-size: small;
         }
     }
@@ -226,7 +226,7 @@
         methods: {
             ...mapMutations(['addNewPage', 'addNewIssue', 'addNewBlock']),
             ...mapActions('addNewQuotes,changeRootPathByDialog,selectSection,editQuotes,addNewQuotes'.split(',')),
-            log(msg){
+            log(msg) {
                 console.log(msg);
             },
             async processEditOperation(operation) {
@@ -260,7 +260,7 @@
                 saveHTMLToPDF(`${rootPath}/${documentName}.html`, `${rootPath}/${documentName}.pdf`);
                 console.log('Write PDF successfully.')
             },
-            saveWebContentPDF(){
+            saveWebContentPDF() {
                 const {$refs, documentName, rootPath} = this;
                 saveWebContentPDF(`${rootPath}/${documentName}.pdf`);
                 console.log('Write PDF successfully.')
@@ -269,7 +269,7 @@
 
         },
         components: {
-            Page,Intersect
+            Page, Intersect
         },
 
 
