@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <h2>{{page.section}}</h2>
-        <textarea class="preword" v-model="page.preword"></textarea>
+        <medium-editor class="preword" text=""></medium-editor>
         <button @click="addNewIssue(page)">add issue</button>
 
         <!--<draggable v-model="page.issues"-->

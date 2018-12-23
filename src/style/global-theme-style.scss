@@ -1,0 +1,72 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-icon] {
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+button {
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #dcdfe6;
+  border-color: #dcdfe6;
+  color: #606266;
+  -webkit-appearance: none;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  transition: .1s;
+  font-weight: 500;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+
+  * {
+    vertical-align: center;
+  }
+}
+
+input {
+  border: 1px solid transparent;
+  border-radius: 2px !important;
+  font-size: 18px;
+  font-variant-ligatures: no-contextual;
+  height: 20px;
+  line-height: 22px;
+  margin: 0;
+  min-width: 1px;
+  padding: 2px 7px;
+
+  &:hover {
+    border-color: #e5e5e5;
+  }
+}
+

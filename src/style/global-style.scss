@@ -1,3 +1,5 @@
+@import "./print-style";
+
 ::-webkit-scrollbar {
   height: 16px;
   overflow: visible;
@@ -31,3 +33,5 @@
 figcaption{
   font-size: small;
 }
+
+@import "./global-theme-style";

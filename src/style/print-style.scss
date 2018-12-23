@@ -1,0 +1,23 @@
+@media print {
+#app{
+  display: block;
+}
+  button,
+  .panel-left,
+  .panel-right,
+  .handler{
+    display: none !important;
+  }
+
+  .page{
+    box-shadow: none;
+    width: auto;
+    height: auto;
+  }
+
+  .panel.main-area{
+    border: none;
+  }
+
+
+}

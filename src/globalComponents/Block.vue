@@ -16,7 +16,7 @@
         <template v-else-if="block.type='image'">
             <figure>
                 <img :src="block.src" draggable="false"/>
-                <medium-editor :text="block.comment" custom-tag="figcaption"></medium-editor>
+                <medium-editor :text="block.comment" custom-tag="figcaption" :placeholder="'text'"></medium-editor>
             </figure>
         </template>
 

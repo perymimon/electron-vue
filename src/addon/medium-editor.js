@@ -5,3 +5,6 @@ import 'medium-editor/dist/css/themes/default.css'
 import './medium-editor.scss'
 Vue.component('medium-editor', editor);
 
+export const defaultOptions = {
+
+}

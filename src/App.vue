@@ -1,28 +1,28 @@
-<!--// function (filepaths, bookmarks) {
-// debugger;
-//     //read image (note: use async in production)
-//     var imageFile = fs.readFileSync(filepaths[0]).toString('base64');
-//     //example for .png
-//     var imageHTHL = '<img src="data:image/png;base64,' + imageFile + '"/>';
-//     //render/display
-//     var _target = document.getElementById('image_container');
-//     _target.insertAdjacentHTML('beforeend', imageHTHL);
-//
-//     return;
-// }-->
 <template>
-    <div id="app">
+    <div id="app" dir="rtl">
         <!-- TOP PANEL -->
-        <div class="panel top-panel">
-            <button @click="changeRootPathByDialog">open</button>
-            <h1>{{projectName}}</h1>
-            <button class="save-to-html" @click="saveToHTML">Save to html</button>
-            <button class="save-to-pdf" @click="saveToPDF">Save to pdf</button>
-            <button class="save-window-to-pdf" @click="saveWebContentPDF">Save window to pdf</button>
+        <div class="panel top-panel kix-document-top-shadow-inner">
+            <button @click="changeRootPathByDialog">
+                <font-awesome-icon size=1x fixed-width icon="folder-open"></font-awesome-icon>
+                <span>open</span>
+            </button>
+            <h1>
+                <font-awesome-icon icon="file" fixed-width></font-awesome-icon>
+                <input type="text" v-model="projectName">
+            </h1>
+            <!--<button class="save-to-html" @click="saveToHTML">-->
+                <!--Save to html-->
+            <!--</button>-->
+            <!--<button class="save-to-pdf" @click="saveToPDF">Save to pdf</button>-->
+            <button class="save-window-to-pdf" @click="saveWebContentPDF">
+                <font-awesome-icon size="1x" fixed-width icon="save"></font-awesome-icon>
+                <span>PDF</span>
+            </button>
+            <div class="document-top-shadow-inner"></div>
         </div>
 
         <!-- LEFT IMAGES FS-->
-        <div class="panel">
+        <div class="panel panel-left">
             <h4>{{section}}</h4>
             <file-list class="folder-image-list" :folderPath="sectionPath" @input="setImagesPaths" extension="jpg|png|avi">
                 <draggable v-model="imagesBlocks"
@@ -41,7 +41,7 @@
         </div>
 
 
-        <div class="panel">
+        <div class="panel panel-right">
             <!-- SECTIONS -->
             <div v-for="section in sections" :key="section"
                  @click="selectSection(section)">
@@ -76,6 +76,85 @@
     </div>
 
 </template>
+
+<style lang="scss">
+    @import "./style/variables";
+
+    h1 {
+        margin: 0;
+        flex: 1;
+        text-align: start;
+        padding: 0 .5em;
+
+    }
+
+    input {
+        flex: 1;
+        margin: 0 0.5em;
+
+    }
+
+    #app {
+        height: 100vh;
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        display: grid;
+        grid-template-columns: 20em 1fr 10em;
+        grid-template-rows: 3em calc(100vh - 4em);
+    }
+
+    .document-top-shadow-inner {
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .1)), to(transparent));
+        height: 6px;
+        position: relative;
+        z-index: 504;
+        opacity: 1;
+        width: 100%;
+    }
+
+    .editor {
+        flex: 1;
+    }
+
+    .panel {
+        border: $border;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-panel {
+        grid-column: 1 / -1;
+        flex-flow: row wrap;
+        border: $border;
+
+
+    }
+
+    .main-area {
+        display: grid;
+        overflow-y: auto;
+        align-items: center;
+        justify-content: center;
+        grid-auto-rows: minmax(max-content, auto);
+    }
+
+    .folder-image-list {
+        overflow-y: auto;
+        figcaption{
+            font-size: small;
+        }
+    }
+
+    .quote-list {
+        border: $border;
+        min-height: 30em;
+        background: darkgray;
+        margin: .4em 0;
+    }
+</style>
 
 <script>
     import {mapActions, mapGetters, mapMutations, mapState} from 'vuex'
@@ -185,65 +264,3 @@
     }
 </script>
 
-
-<style lang="scss">
-    h1 {
-        margin: 0;
-    }
-
-
-    #app {
-        height: 100vh;
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        display: grid;
-        grid-template-columns: 20em 1fr 10em;
-        grid-template-rows: 3em calc(100vh - 4em);
-    }
-
-    .editor {
-        flex: 1;
-    }
-
-    .panel {
-        border: 1px solid;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .top-panel {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        border: none;
-
-        input {
-            flex: 1;
-            border: none;
-        }
-    }
-
-    .main-area {
-        display: grid;
-        overflow-y: auto;
-        align-items: center;
-        justify-content: center;
-        grid-auto-rows: minmax(max-content, auto);
-    }
-
-    .folder-image-list {
-        overflow-y: auto;
-        figcaption{
-            font-size: small;
-        }
-    }
-
-    .quote-list {
-        border: 1px solid beige;
-        min-height: 30em;
-        background: darkgray;
-        margin: .4em 0;
-    }
-</style>
